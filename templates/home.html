@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Verbattle — Lobby Principal{% endblock %}
+
+{% block content %}
+<!-- Tarjeta Gamer de Perfil de Jugador -->
+<div class="vb-card">
+    <div class="profile-header">
+        <div class="profile-info">
+            <div class="avatar-box">👾</div>
+            <div>
+                <h5 class="gamer-tag-name">{{ perfil.gamer_tag|default:"Gamer_Estudiante" }}</h5>
+                <span class="level-tag">Nivel: {{ perfil.nivel_dominio|default:"BAJO" }}</span>
+            </div>
+        </div>
+        <span class="xp-badge">
+            ⚡ {{ perfil.puntos_xp|default:0 }} XP
+        </span>
+    </div>
+
+    <!-- Grid de Estadísticas (2 Columnas Paralelas) -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-num text-warning">🏆 {{ perfil.victorias|default:0 }}</div>
+            <div class="stat-desc">Victorias</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num text-info">⚔️ {{ perfil.derrotas|default:0 }}</div>
+            <div class="stat-desc">Duelos Totales</div>
+        </div>
+    </div>
+</div>
+
+<!-- Botón Arcade Principal "Buscar Duelo" -->
+<div class="mb-4">
+    <a href="{% url 'sala_duelo_directa' %}" class="btn-verbattle-arcade">
+        <span>⚔️</span>
+        <span>¡BUSCAR DUELO 1VS1!</span>
+    </a>
+</div>
+
+<!-- Contenedor de Salas Activas -->
+<div class="vb-card">
+    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-secondary">
+        <h6 class="fw-bold mb-0 text-info d-flex align-items-center gap-2">
+            <span>📡</span> Salas Activas en Vivo
+        </h6>
+        <span class="badge bg-danger text-white">🔴 EN VIVO</span>
+    </div>
+
+    {% if salas %}
+        {% for sala in salas %}
+            <div class="d-flex justify-content-between align-items-center p-2 mb-2 bg-dark rounded border border-secondary">
+                <div>
+                    <strong class="text-success">Sala #{{ sala.codigo_sala }}</strong>
+                    <div class="small text-muted">Anfitrión: {{ sala.jugador1.username|default:"Jugador 1" }}</div>
+                </div>
+                <a href="{% url 'sala_duelo' sala.id %}" class="btn btn-sm btn-outline-success rounded-pill fw-bold">Unirse ⚔️</a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="text-center py-4 text-muted">
+            <div class="fs-1 mb-2">🎮</div>
+            <p class="mb-1 fw-semibold text-light">No hay salas esperando oponente</p>
+            <small class="text-secondary">¡Haz clic arriba en el botón verde para entrar a la Arena de Duelo!</small>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
