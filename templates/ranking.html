@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Verbattle — Ranking Global{% endblock %}
+
+{% block content %}
+<!-- Cabecera del Ranking -->
+<div class="vb-card text-center mb-3">
+    <h4 class="fw-black text-info m-0 d-flex align-items-center justify-content-center gap-2">
+        <span>🏆</span> CLASIFICACIÓN GLOBAL <span>🏆</span>
+    </h4>
+    <small class="text-muted">Top Jugadores Verbattle 2026</small>
+</div>
+
+<!-- Tabla de Posiciones E-Sports -->
+<div class="vb-card p-2">
+    <div class="table-responsive">
+        <table class="table table-dark table-hover align-middle m-0 text-center">
+            <thead>
+                <tr class="text-success border-bottom border-secondary" style="font-size: 0.85rem;">
+                    <th>POS</th>
+                    <th class="text-start">JUGADOR</th>
+                    <th>NIVEL</th>
+                    <th>PUNTOS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Puesto #1 -->
+                <tr class="table-active">
+                    <td class="fw-bold text-warning">🥇 #1</td>
+                    <td class="text-start fw-bold text-white">Johan_PO</td>
+                    <td><span class="badge bg-danger text-white">ALTO</span></td>
+                    <td class="fw-black text-info">2,800 PTS</td>
+                </tr>
+                <!-- Puesto #2 (Tú) -->
+                <tr>
+                    <td class="fw-bold text-light">🥈 #2</td>
+                    <td class="text-start fw-bold text-success">Luigi_SM <small class="text-muted">(Tú)</small></td>
+                    <td><span class="badge bg-danger text-white">ALTO</span></td>
+                    <td class="fw-black text-info">2,400 PTS</td>
+                </tr>
+                <!-- Puesto #3 -->
+                <tr>
+                    <td class="fw-bold text-warning-emphasis">🥉 #3</td>
+                    <td class="text-start fw-bold text-white">Oscar_Dev</td>
+                    <td><span class="badge bg-primary text-white">MEDIO</span></td>
+                    <td class="fw-black text-info">1,950 PTS</td>
+                </tr>
+                <!-- Puesto #4 -->
+                <tr>
+                    <td class="fw-bold text-muted">#4</td>
+                    <td class="text-start fw-bold text-white">Kewin_Dev</td>
+                    <td><span class="badge bg-primary text-white">MEDIO</span></td>
+                    <td class="fw-black text-info">1,700 PTS</td>
+                </tr>
+                <!-- Puesto #5 -->
+                <tr>
+                    <td class="fw-bold text-muted">#5</td>
+                    <td class="text-start fw-bold text-white">Joel_Dev</td>
+                    <td><span class="badge bg-primary text-white">MEDIO</span></td>
+                    <td class="fw-black text-info">1,500 PTS</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Botón de Retorno -->
+<div class="mt-3">
+    <a href="{% url 'home' %}" class="btn btn-verbattle btn-lg text-uppercase">
+        <i class="bi bi-house-door-fill me-2"></i> Volver al Lobby
+    </a>
+</div>
+{% endblock %}

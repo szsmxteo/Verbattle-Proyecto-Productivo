@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% block title %}Verbattle App{% endblock %}</title>
+
+    <!-- Estilos Oficiales Verbattle (Local v4) -->
+    <link rel="stylesheet" href="{% static 'css/verbattle-theme.css' %}?v=4">
+</head>
+<body class="body-verbattle">
+
+    <!-- Navbar Superior -->
+    <nav class="navbar-verbattle">
+        <a class="brand-text" href="{% url 'home' %}">
+            VER<span>BATTLE</span> 🕹️
+        </a>
+        <span class="xp-badge">
+            ⚡ {{ perfil.puntos_xp|default:0 }} XP
+        </span>
+    </nav>
+
+    <!-- Contenedor Principal Ajustado a Celular -->
+    <main class="container my-3" style="max-width: 500px;">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Barra de Navegación Inferior Flotante -->
+    <nav class="bottom-nav-fixed">
+        <a href="{% url 'home' %}" class="nav-link-mobile active">
+            <span>🏠 Lobby</span>
+        </a>
+        <a href="{% url 'sala_duelo_directa' %}" class="nav-link-mobile">
+            <span>⚔️ Duelo</span>
+        </a>
+        <a href="{% url 'ranking' %}" class="nav-link-mobile">
+            <span>🏆 Ranking</span>
+        </a>
+        <a href="/admin/" class="nav-link-mobile">
+            <span>👤 Perfil</span>
+        </a>
+    </nav>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
