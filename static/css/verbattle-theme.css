@@ -1,0 +1,227 @@
+/* ==========================================================================
+   VERBATTLE — ESTILOS OFICIALES E-SPORTS (MOBILE-FIRST)
+   ========================================================================== */
+
+:root {
+    --bg-dark: #0d1b2a;
+    --bg-card: #1b263b;
+    --accent-green: #00e676;
+    --accent-blue: #00b4d8;
+    --text-light: #f8f9fa;
+    --font-main: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+body.body-verbattle {
+    background-color: var(--bg-dark) !important;
+    color: var(--text-light) !important;
+    font-family: var(--font-main) !important;
+    min-height: 100vh;
+    margin: 0;
+    padding-bottom: 90px;
+}
+
+/* Reset Global de Enlaces */
+a, a:visited, a:hover, a:active {
+    text-decoration: none !important;
+}
+
+/* Navbar Superior */
+.navbar-verbattle {
+    background-color: #08111d;
+    border-bottom: 2px solid var(--accent-blue);
+    padding: 12px 16px;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    box-shadow: 0 4px 15px rgba(0, 180, 216, 0.25);
+}
+
+.brand-text, .brand-text:visited {
+    font-weight: 900;
+    letter-spacing: 1px;
+    font-size: 1.2rem;
+    color: #FFFFFF !important;
+}
+
+.brand-text span {
+    color: var(--accent-green) !important;
+}
+
+.xp-badge {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+    color: #000000 !important;
+    font-weight: 900;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 0 10px rgba(0, 230, 118, 0.3);
+}
+
+/* Tarjeta Gamer */
+.vb-card {
+    background-color: var(--bg-card) !important;
+    border: 1px solid rgba(0, 180, 216, 0.35) !important;
+    border-radius: 18px !important;
+    padding: 18px !important;
+    margin-bottom: 16px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+.profile-header {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 16px;
+}
+
+.profile-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+.avatar-box {
+    background-color: #0d1b2a;
+    border: 2px solid var(--accent-green);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 0 10px rgba(0, 230, 118, 0.3);
+}
+
+.gamer-tag-name {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #FFFFFF !important;
+    margin: 0;
+}
+
+.level-tag {
+    display: inline-block;
+    background-color: var(--accent-blue);
+    color: #000 !important;
+    font-size: 0.7rem;
+    font-weight: 900;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    margin-top: 2px;
+}
+
+/* Grid de Estadísticas */
+.stats-grid {
+    display: flex !important;
+    gap: 10px !important;
+    margin-top: 12px;
+}
+
+.stat-card {
+    flex: 1;
+    background-color: #0d1b2a;
+    border: 1px solid rgba(0, 180, 216, 0.25);
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+}
+
+.stat-num {
+    font-size: 1.2rem;
+    font-weight: 900;
+    margin-bottom: 2px;
+}
+
+.stat-desc {
+    font-size: 0.75rem;
+    color: #8E9BAE;
+    font-weight: 600;
+}
+
+/* Botón Arcade Neón */
+.btn-verbattle-arcade, .btn-verbattle-arcade:visited, .btn-verbattle-arcade:hover {
+    background: linear-gradient(135deg, #00e676, #00b4d8) !important;
+    color: #000000 !important;
+    font-weight: 900 !important;
+    border-radius: 14px !important;
+    border: none !important;
+    padding: 16px 20px !important;
+    width: 100% !important;
+    font-size: 1.1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    box-shadow: 0 0 20px rgba(0, 230, 118, 0.4) !important;
+    box-sizing: border-box !important;
+}
+
+/* Botones de Opciones (Arena de Duelo) */
+.btn-opcion {
+    background-color: #0d1b2a !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(0, 180, 216, 0.4) !important;
+    border-radius: 12px !important;
+    padding: 14px !important;
+    text-align: left !important;
+    font-weight: 700 !important;
+    width: 100% !important;
+    margin-bottom: 8px !important;
+}
+
+.btn-opcion:hover {
+    border-color: var(--accent-green) !important;
+    color: var(--accent-green) !important;
+}
+
+/* Temporizador Duelo */
+.timer-box {
+    background-color: #0d1b2a;
+    border: 2px solid var(--accent-green);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1.2rem;
+    color: var(--accent-green);
+    margin: 0 auto;
+    box-shadow: 0 0 12px rgba(0, 230, 118, 0.4);
+}
+
+/* Barra Inferior Flotante */
+.bottom-nav-fixed {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    background-color: #08111d !important;
+    border-top: 1px solid rgba(0, 180, 216, 0.3) !important;
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    padding: 12px 0 !important;
+    z-index: 9999 !important;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.7) !important;
+}
+
+.nav-link-mobile, .nav-link-mobile:visited {
+    color: #8E9BAE !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+}
+
+.nav-link-mobile.active, .nav-link-mobile:hover {
+    color: var(--accent-green) !important;
+}
