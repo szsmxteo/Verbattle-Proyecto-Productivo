@@ -1,10 +1,11 @@
+```
 # ⚡ VERBATTLE — Desafíos Lingüísticos 1vs1
 
 <p align="center">
-  <img src="recursos/LOGO_ESTANDAR_VERBATTLE.png" alt="Logo Verbattle" width="280"/>
+  
 </p>
 
-> **Verbattle** es una plataforma gamificada de aprendizaje lingüístico orientada al público adolescente y gamer. Permite conectar a dos estudiantes en una sala virtual en tiempo real para resolver retos de vocabulario, velocidad y gramática en inglés y español.
+&gt; **Verbattle** es una plataforma gamificada de aprendizaje lingüístico orientada al público adolescente y gamer. Permite conectar a dos estudiantes en una sala virtual en tiempo real para resolver retos de vocabulario, velocidad y gramática en inglés y español.
 
 ---
 
@@ -16,14 +17,13 @@
 
 ---
 
-## 👥 Equipo de Trabajo
-| Nombre Completo | Rol en el Proyecto |
-| :--- | :--- |
-| **Johan Fabián Torres Parra** | Product Owner (PO) |
-| **Luigi Mateo Rubio Forero** | Scrum Master (SM) |
-| **Kewin Alejandro Vásquez Ramírez** | Equipo de Desarrollo / UI-UX |
-| **Oscar David Velasco Romero** | Equipo de Desarrollo / Backend |
-| **Joel Nicolás Piraján González** | Equipo de Desarrollo / QA |
+## 👥 Equipo de Trabajo y Organización por Ramas
+| Integrante | Rol Scrum | Módulo / Rama Asignada |
+| :--- | :--- | :--- |
+| **Johan Fabián Torres Parra** | Product Owner (PO) | Controladores `views.py`, URLs, modelos ORM y Base de Datos (`rama-backend`) |
+| **Luigi Mateo Rubio Forero** | Scrum Master (SM) | Interfaz móvil, maquetación visual, CSS y plantillas HTML (`rama-frontend`) |
+| **Oscar David Velasco Romero** | Equipo de Desarrollo / QA | Pruebas unitarias de calidad y validación de formularios (`rama-testing`) |
+| **Kewin Alejandro Vásquez Ramírez** | Equipo de Desarrollo / Docs | Documentación oficial del proyecto, actas y entregables (`rama-docs`) |
 
 ---
 
@@ -33,7 +33,7 @@
 * **Base de Datos:** MySQL Server 8.0
 * **Estilos Visuales:** Paleta e-sports (`#0D1B2A`, `#00E676`, `#00B4D8`) + Tipografía Montserrat
 * **Prototipado:** Tkinter (Escritorio) / Figma (UI-UX)
-* **Entorno y Control de Versiones:** Git & GitHub Codespaces
+* **Entorno y Control de Versiones:** Git &amp; GitHub Codespaces
 
 ---
 
@@ -55,16 +55,18 @@ cd Verbattle-Proyecto-Productivo
 # 3. Ejecutar el prototipo
 python verbattle_prototype.py
 
-3. **Guardar los cambios:**
-   * Presiona `Ctrl + S` (o `Cmd + S` en Mac) para guardar el archivo.
+```
+
+```
 
 ---
 
-### PASO 5: Publicar todo en GitHub desde la Terminal
+### 🚀 Pasos para publicar la actualización en GitHub desde la Terminal
 
-Una vez guardado el `README.md`, ve a la **terminal** en la parte inferior de Codespaces y ejecuta estos 3 comandos en orden para enviar todos los archivos a GitHub:
+Una vez reemplazado el texto en el archivo **`README.md`** y guardado con `Ctrl + S`, ejecuta estos comandos en tu terminal de VS Code / Codespaces [3, 4]:
 
 ```bash
-git add .
-git commit -m "Se configura la portada principal README.md, recursos y prototipo de Verbattle"
+git add README.md
+git commit -m "Docs: Actualización del README.md con roles oficiales del equipo y ramas de trabajo"
 git push origin main
+```
