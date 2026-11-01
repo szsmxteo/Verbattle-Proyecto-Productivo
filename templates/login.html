@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Verbattle — Iniciar Sesión{% endblock %}
+
+{% block content %}
+<div class="vb-card text-center py-4">
+    <div class="mb-3">
+        <h2 class="brand-text fs-1">VER<span>BATTLE</span> 🕹️</h2>
+        <small class="text-muted fw-bold">Desafíos Lingüísticos 1vs1</small>
+    </div>
+
+    <h5 class="text-white fw-extrabold mb-4">¡INGRESA A LA ARENA!</h5>
+
+    <form action="{% url 'home' %}" method="POST" class="text-start">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label text-info fw-bold">GamerTag / Usuario:</label>
+            <input type="text" name="gamer_tag" class="form-control bg-dark text-white border-secondary rounded-3" placeholder="Ej. Gamer_Estudiante" value="{{ perfil.gamer_tag }}" required>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label text-info fw-bold">Contraseña:</label>
+            <input type="password" name="password" class="form-control bg-dark text-white border-secondary rounded-3" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn btn-verbattle-arcade mb-3">
+            ⚡ INICIAR SESIÓN
+        </button>
+    </form>
+
+    <div class="border-top border-secondary pt-3 mt-3">
+        <small class="text-muted">¿Aún no tienes cuenta gamer?</small><br>
+        <a href="{% url 'registro' %}" class="text-success fw-bold">¡Regístrate gratis aquí!</a>
+    </div>
+</div>
+{% endblock %}

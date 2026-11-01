@@ -1,0 +1,120 @@
+/* =========================================
+   VERBATTLE - GLOBAL STYLES (e-Sports Theme)
+   ========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap');
+
+:root {
+    /* Paleta de Colores Estricta */
+    --bg-color: #0d1b2a;
+    --card-bg: #1b263b;
+    --neon-green: #00e676;
+    --neon-cyan: #00b4d8;
+    --text-light: #e0e1dd;
+    --text-muted: #8d99ae;
+    --border-color: #415a77;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-light);
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    /* Evitar scroll horizontal */
+    overflow-x: hidden; 
+}
+
+/* Contenedor principal Mobile-First (max 500px) */
+.vb-container {
+    width: 100%;
+    max-width: 500px;
+    background-color: var(--bg-color);
+    position: relative;
+    padding-bottom: 80px; /* Espacio para la barra flotante */
+    min-height: 100vh;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* Tarjetas (.vb-card) */
+.vb-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Textos Neón */
+.text-neon-green {
+    color: var(--neon-green);
+    text-shadow: 0 0 8px rgba(0, 230, 118, 0.4);
+}
+
+.text-neon-cyan {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 8px rgba(0, 180, 216, 0.4);
+}
+
+/* Botones Gamer (A, B, C, D) */
+.vb-btn {
+    background-color: transparent;
+    color: var(--text-light);
+    border: 2px solid var(--neon-cyan);
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.vb-btn:hover {
+    background-color: rgba(0, 180, 216, 0.1);
+    box-shadow: 0 0 10px rgba(0, 180, 216, 0.5);
+}
+
+.vb-btn:active {
+    transform: scale(0.98);
+}
+
+/* Barra de Navegación Flotante Fija */
+.bottom-nav-fixed {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 500px;
+    background-color: var(--card-bg);
+    border-top: 2px solid var(--neon-green);
+    display: flex;
+    justify-content: space-around;
+    padding: 15px 0;
+    z-index: 1000;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.bottom-nav-fixed a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 24px;
+    transition: color 0.3s;
+}
+
+.bottom-nav-fixed a:hover, .bottom-nav-fixed a.active {
+    color: var(--neon-green);
+    text-shadow: 0 0 8px rgba(0, 230, 118, 0.6);
+}
+
+/* Personalización del Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-color); }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }

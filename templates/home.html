@@ -32,9 +32,9 @@
     </div>
 </div>
 
-<!-- Botón Arcade Principal "Buscar Duelo" -->
+<!-- Botón Arcade Principal "Buscar Duelo" (Conectado a Matchmaking) -->
 <div class="mb-4">
-    <a href="{% url 'sala_duelo_directa' %}" class="btn-verbattle-arcade">
+    <a href="{% url 'matchmaking' %}" class="btn-verbattle-arcade">
         <span>⚔️</span>
         <span>¡BUSCAR DUELO 1VS1!</span>
     </a>
@@ -63,7 +63,7 @@
         <div class="text-center py-4 text-muted">
             <div class="fs-1 mb-2">🎮</div>
             <p class="mb-1 fw-semibold text-light">No hay salas esperando oponente</p>
-            <small class="text-secondary">¡Haz clic arriba en el botón verde para entrar a la Arena de Duelo!</small>
+            <small class="text-secondary">¡Haz clic arriba en el botón verde para buscar una partida!</small>
         </div>
     {% endif %}
 </div>
