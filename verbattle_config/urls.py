@@ -3,10 +3,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    # Frontend
-    path('', include('verbattle.urls')),
-
-    # Backend API
-    path('api/', include('core.urls')),
+    # Apuntamos a las vistas de 'core' que es donde están los modelos nuevos
+    path('', include('core.urls')), 
 ]

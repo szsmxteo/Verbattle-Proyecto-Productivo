@@ -1,12 +1,7 @@
 from django.contrib import admin
-from .models import (
-    PerfilUsuario,
-    SalaVirtual,
-    RetoLinguistico,
-    ProgresoRanking
-)
+from .models import PerfilJugador, SalaVirtual, Pregunta
 
-admin.site.register(PerfilUsuario)
+# Registramos los 3 modelos oficiales del Documento Maestro
+admin.site.register(PerfilJugador)
 admin.site.register(SalaVirtual)
-admin.site.register(RetoLinguistico)
-admin.site.register(ProgresoRanking)
+admin.site.register(Pregunta)
