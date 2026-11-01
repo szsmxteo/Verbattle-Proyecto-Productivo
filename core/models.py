@@ -1,87 +1,42 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
-class PerfilUsuario(models.Model):
-    usuario = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE
-    )
-    nombre_completo = models.CharField(max_length=150)
-    puntaje = models.IntegerField(default=0)
-    nivel = models.IntegerField(default=1)
+class PerfilJugador(models.Model):
+    # Vinculamos con el usuario de Django (opcional pero recomendado)
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    
+    # Campos según el Documento Maestro
+    NIVELES = [('BAJO', 'Bajo'), ('MEDIO', 'Medio'), ('ALTO', 'Alto')]
+    gamer_tag = models.CharField(max_length=50, default='Gamer_Estudiante')
+    nivel_dominio = models.CharField(max_length=10, choices=NIVELES, default='BAJO')
+    puntos_xp = models.IntegerField(default=0)
+    victorias = models.IntegerField(default=0)
+    derrotas = models.IntegerField(default=0)
+    
+    # NUEVOS CAMPOS PARA EL SISTEMA DE RACHAS (Streak)
+    racha_actual = models.IntegerField(default=0)
+    ultima_conexion = models.DateField(null=True, blank=True)
 
     def __str__(self):
-        return self.nombre_completo
+        return self.gamer_tag
 
 class SalaVirtual(models.Model):
-    nombre = models.CharField(max_length=100)
-    codigo = models.CharField(max_length=10, unique=True)
-    jugador_1 = models.ForeignKey(
-        PerfilUsuario,
-        on_delete=models.CASCADE,
-        related_name="salas_como_jugador_1"
-    )
-    jugador_2 = models.ForeignKey(
-        PerfilUsuario,
-        on_delete=models.CASCADE,
-        related_name="salas_como_jugador_2",
-        null=True,
-        blank=True
-    )
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
-    activa = models.BooleanField(default=True)
+    codigo_sala = models.CharField(max_length=10, unique=True)
+    estado = models.CharField(max_length=20, default='ESPERANDO') # ESPERANDO, JUGANDO, FINALIZADA
+    jugador1 = models.ForeignKey(PerfilJugador, related_name='salas_anfitrion', on_delete=models.CASCADE)
+    jugador2 = models.ForeignKey(PerfilJugador, related_name='salas_invitado', null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.nombre
+        return f"Sala {self.codigo_sala} - {self.estado}"
 
-class RetoLinguistico(models.Model):
-
-    IDIOMAS = [
-        ('EN', 'Inglés'),
-        ('ES', 'Español'),
-    ]
-
-    sala = models.ForeignKey(
-        SalaVirtual,
-        on_delete=models.CASCADE,
-        related_name="retos"
-    )
-
-    idioma = models.CharField(
-        max_length=2,
-        choices=IDIOMAS
-    )
-
-    pregunta = models.TextField()
-    respuesta_correcta = models.CharField(max_length=255)
-    dificultad = models.CharField(max_length=20, default="Fácil")
-    puntos = models.IntegerField(default=10)
-
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
+class Pregunta(models.Model):
+    categoria = models.CharField(max_length=50)
+    enunciado = models.TextField()
+    opcion_a = models.CharField(max_length=100)
+    opcion_b = models.CharField(max_length=100)
+    opcion_c = models.CharField(max_length=100)
+    opcion_d = models.CharField(max_length=100)
+    respuesta_correcta = models.CharField(max_length=1)
 
     def __str__(self):
-        return self.pregunta
-
-class ProgresoRanking(models.Model):
-
-    usuario = models.ForeignKey(
-        PerfilUsuario,
-        on_delete=models.CASCADE,
-        related_name="progresos"
-    )
-
-    reto = models.ForeignKey(
-        RetoLinguistico,
-        on_delete=models.CASCADE,
-        related_name="resultados"
-    )
-
-    respuesta_usuario = models.CharField(max_length=255)
-    correcta = models.BooleanField(default=False)
-    puntos_obtenidos = models.IntegerField(default=0)
-
-    fecha_respuesta = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.usuario} - {self.puntos_obtenidos} puntos"
+        return self.enunciado

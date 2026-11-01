@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import PerfilJugador, SalaVirtual, Pregunta
+from core.models import PerfilJugador, SalaVirtual, Pregunta
 
 def get_perfil_activo():
     """Obtiene o crea el perfil principal del jugador en la BD"""
