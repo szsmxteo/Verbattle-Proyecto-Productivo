@@ -2,13 +2,17 @@
    VERBATTLE — ESTILOS OFICIALES E-SPORTS (MOBILE-FIRST)
    ========================================================================== */
 
+/* 1. Importación de la tipografía oficial */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap');
+
 :root {
     --bg-dark: #0d1b2a;
     --bg-card: #1b263b;
     --accent-green: #00e676;
     --accent-blue: #00b4d8;
+    --danger-red: #ff1744; /* Color para respuestas incorrectas */
     --text-light: #f8f9fa;
-    --font-main: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-main: 'Montserrat', system-ui, -apple-system, sans-serif; /* Fuente oficial */
 }
 
 body.body-verbattle {
@@ -17,7 +21,7 @@ body.body-verbattle {
     font-family: var(--font-main) !important;
     min-height: 100vh;
     margin: 0;
-    padding-bottom: 90px;
+    padding-bottom: 90px; /* Espacio para el bottom nav */
 }
 
 /* Reset Global de Enlaces */
@@ -25,7 +29,31 @@ a, a:visited, a:hover, a:active {
     text-decoration: none !important;
 }
 
-/* Navbar Superior */
+/* Contenedor Principal Mobile-First (Máx 500px centrado) */
+.vb-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
+/* =========================================
+   TEXTOS NEÓN
+   ========================================= */
+.text-neon-green {
+    color: var(--accent-green) !important;
+    text-shadow: 0 0 8px rgba(0, 230, 118, 0.4);
+}
+
+.text-neon-cyan {
+    color: var(--accent-blue) !important;
+    text-shadow: 0 0 8px rgba(0, 180, 216, 0.4);
+}
+
+/* =========================================
+   NAVBAR SUPERIOR
+   ========================================= */
 .navbar-verbattle {
     background-color: #08111d;
     border-bottom: 2px solid var(--accent-blue);
@@ -60,7 +88,9 @@ a, a:visited, a:hover, a:active {
     box-shadow: 0 0 10px rgba(0, 230, 118, 0.3);
 }
 
-/* Tarjeta Gamer */
+/* =========================================
+   TARJETAS Y PERFIL
+   ========================================= */
 .vb-card {
     background-color: var(--bg-card) !important;
     border: 1px solid rgba(0, 180, 216, 0.35) !important;
@@ -116,7 +146,9 @@ a, a:visited, a:hover, a:active {
     margin-top: 2px;
 }
 
-/* Grid de Estadísticas */
+/* =========================================
+   GRID DE ESTADÍSTICAS
+   ========================================= */
 .stats-grid {
     display: flex !important;
     gap: 10px !important;
@@ -144,7 +176,9 @@ a, a:visited, a:hover, a:active {
     font-weight: 600;
 }
 
-/* Botón Arcade Neón */
+/* =========================================
+   BOTONES
+   ========================================= */
 .btn-verbattle-arcade, .btn-verbattle-arcade:visited, .btn-verbattle-arcade:hover {
     background: linear-gradient(135deg, #00e676, #00b4d8) !important;
     color: #000000 !important;
@@ -160,44 +194,55 @@ a, a:visited, a:hover, a:active {
     gap: 8px !important;
     box-shadow: 0 0 20px rgba(0, 230, 118, 0.4) !important;
     box-sizing: border-box !important;
+    transition: transform 0.2s;
+}
+
+.btn-verbattle-arcade:active {
+    transform: scale(0.98);
 }
 
 /* Botones de Opciones (Arena de Duelo) */
-.btn-opcion {
+.vb-btn {
     background-color: #0d1b2a !important;
     color: #FFFFFF !important;
-    border: 1px solid rgba(0, 180, 216, 0.4) !important;
+    border: 2px solid rgba(0, 180, 216, 0.4) !important;
     border-radius: 12px !important;
-    padding: 14px !important;
+    padding: 14px 16px !important;
     text-align: left !important;
     font-weight: 700 !important;
     width: 100% !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 10px !important;
+    transition: all 0.3s ease;
 }
 
-.btn-opcion:hover {
+.vb-btn:hover:not(:disabled) {
     border-color: var(--accent-green) !important;
     color: var(--accent-green) !important;
+    background-color: rgba(0, 230, 118, 0.05) !important;
 }
 
-/* Temporizador Duelo */
-.timer-box {
-    background-color: #0d1b2a;
-    border: 2px solid var(--accent-green);
+/* =========================================
+   TEMPORIZADOR (CIRCULAR)
+   ========================================= */
+.timer-circle {
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    border: 3px solid var(--accent-cyan, #00b4d8);
     display: flex;
-    align-items: center;
     justify-content: center;
-    font-weight: 900;
-    font-size: 1.2rem;
-    color: var(--accent-green);
+    align-items: center;
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--accent-cyan, #00b4d8);
+    box-shadow: 0 0 10px rgba(0, 180, 216, 0.4), inset 0 0 10px rgba(0, 180, 216, 0.2);
+    transition: all 0.3s ease;
     margin: 0 auto;
-    box-shadow: 0 0 12px rgba(0, 230, 118, 0.4);
 }
 
-/* Barra Inferior Flotante */
+/* =========================================
+   BARRA INFERIOR FLOTANTE
+   ========================================= */
 .bottom-nav-fixed {
     position: fixed !important;
     bottom: 0 !important;

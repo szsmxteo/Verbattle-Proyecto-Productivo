@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Verbattle — Registro Gamer{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos para los Inputs y Selects Gamer */
+    .gamer-input, .gamer-select {
+        background-color: rgba(13, 27, 42, 0.6) !important;
+        border: 1px solid rgba(0, 180, 216, 0.4) !important;
+        color: var(--text-light) !important;
+        font-weight: 600;
+        padding: 12px 15px;
+        transition: all 0.3s ease;
+    }
+    
+    .gamer-input:focus, .gamer-select:focus {
+        background-color: rgba(13, 27, 42, 0.9) !important;
+        border-color: var(--accent-green) !important;
+        box-shadow: 0 0 10px rgba(0, 230, 118, 0.3) !important;
+        color: #ffffff !important;
+        outline: none;
+    }
+
+    .gamer-input::placeholder {
+        color: rgba(255, 255, 255, 0.3) !important;
+        font-weight: 400;
+    }
+
+    /* Estilo para las opciones del select (evitar fondo blanco) */
+    .gamer-select option {
+        background-color: var(--bg-dark);
+        color: var(--text-light);
+        padding: 10px;
+    }
+
+    /* Título con efecto de brillo */
+    .title-glow {
+        text-shadow: 0 0 15px rgba(0, 180, 216, 0.4);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="vb-card text-center py-4 mt-4">
+    <!-- Logo superior -->
+    <div class="mb-3">
+        <h2 class="brand-text fs-1">VER<span>BATTLE</span> 🕹️</h2>
+        <small class="text-muted fw-bold" style="letter-spacing: 1px;">CREA TU PERFIL DE COMPETIDOR</small>
+    </div>
+
+    <h5 class="text-white fw-black mb-4 title-glow">¡ÚNETE A LA COMUNIDAD!</h5>
+
+    <form action="{% url 'home' %}" method="POST" class="text-start">
+        {% csrf_token %}
+        
+        <!-- GamerTag / Usuario -->
+        <div class="mb-3">
+            <label class="form-label text-neon-cyan fw-bold" style="font-size: 0.9rem;">GamerTag / Apodo:</label>
+            <input type="text" name="gamer_tag" class="form-control gamer-input rounded-3" placeholder="Ej. ProGamer_2026" required autocomplete="username">
+        </div>
+
+        <!-- Correo Electrónico -->
+        <div class="mb-3">
+            <label class="form-label text-neon-cyan fw-bold" style="font-size: 0.9rem;">Correo Institucional / Personal:</label>
+            <input type="email" name="email" class="form-control gamer-input rounded-3" placeholder="estudiante@colegio.edu.co" required autocomplete="email">
+        </div>
+
+        <!-- Contraseña -->
+        <div class="mb-3">
+            <label class="form-label text-neon-cyan fw-bold" style="font-size: 0.9rem;">Contraseña:</label>
+            <input type="password" name="password" class="form-control gamer-input rounded-3" placeholder="••••••••" required autocomplete="new-password">
+        </div>
+
+        <!-- Selección de Nivel de Dominio -->
+        <div class="mb-4">
+            <label class="form-label text-neon-cyan fw-bold" style="font-size: 0.9rem;">Nivel de Conocimiento (Inglés Técnico):</label>
+            <select name="nivel_dominio" class="form-select gamer-select rounded-3">
+                <option value="BAJO" {% if perfil.nivel_dominio == 'BAJO' %}selected{% endif %}>🟢 Bajo / Principiante</option>
+                <option value="MEDIO" {% if perfil.nivel_dominio == 'MEDIO' %}selected{% endif %}>🟡 Medio / Intermedio</option>
+                <option value="ALTO" {% if perfil.nivel_dominio == 'ALTO' %}selected{% endif %}>🔴 Alto / Avanzado</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn-verbattle-arcade mb-3">
+            🚀 CREAR MI CUENTA GAMER
+        </button>
+    </form>
+
+    <!-- Separador y enlace a Login -->
+    <div class="d-flex align-items-center my-3">
+        <hr class="flex-grow-1 border-secondary opacity-25">
+        <span class="px-3 text-muted small fw-bold">O</span>
+        <hr class="flex-grow-1 border-secondary opacity-25">
+    </div>
+
+    <div>
+        <small class="text-muted fw-semibold">¿Ya posees una cuenta registrada?</small><br>
+        <a href="{% url 'login' %}" class="text-neon-green fw-bold text-decoration-none mt-1 d-inline-block">
+            Inicia Sesión aquí ⚔️
+        </a>
+    </div>
+</div>
+{% endblock %}

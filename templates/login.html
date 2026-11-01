@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Verbattle — Iniciar Sesión{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos para los Inputs Gamer */
+    .gamer-input {
+        background-color: rgba(13, 27, 42, 0.6) !important;
+        border: 1px solid rgba(0, 180, 216, 0.4) !important;
+        color: var(--text-light) !important;
+        font-weight: 600;
+        padding: 12px 15px;
+        transition: all 0.3s ease;
+    }
+    
+    .gamer-input:focus {
+        background-color: rgba(13, 27, 42, 0.9) !important;
+        border-color: var(--accent-green) !important;
+        box-shadow: 0 0 10px rgba(0, 230, 118, 0.3) !important;
+        color: #ffffff !important;
+        outline: none;
+    }
+
+    .gamer-input::placeholder {
+        color: rgba(255, 255, 255, 0.3) !important;
+        font-weight: 400;
+    }
+
+    /* Título con efecto de brillo */
+    .title-glow {
+        text-shadow: 0 0 15px rgba(0, 230, 118, 0.4);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="vb-card text-center py-4 mt-4">
+    <!-- Logo superior -->
+    <div class="mb-3">
+        <h2 class="brand-text fs-1">VER<span>BATTLE</span> 🕹️</h2>
+        <small class="text-muted fw-bold" style="letter-spacing: 1px;">DESAFÍOS LINGÜÍSTICOS 1VS1</small>
+    </div>
+
+    <h5 class="text-white fw-black mb-4 title-glow">¡INGRESA A LA ARENA!</h5>
+
+    <form action="{% url 'home' %}" method="POST" class="text-start">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label class="form-label text-neon-cyan fw-bold" style="font-size: 0.9rem;">GamerTag / Usuario:</label>
+            <input type="text" name="gamer_tag" class="form-control gamer-input rounded-3" placeholder="Ej. Gamer_Estudiante" value="{{ perfil.gamer_tag }}" required autocomplete="username">
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label text-neon-cyan fw-bold" style="font-size: 0.9rem;">Contraseña:</label>
+            <input type="password" name="password" class="form-control gamer-input rounded-3" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="btn-verbattle-arcade mb-3">
+            ⚡ INICIAR SESIÓN
+        </button>
+    </form>
+
+    <!-- Separador y enlace a Registro -->
+    <div class="d-flex align-items-center my-3">
+        <hr class="flex-grow-1 border-secondary opacity-25">
+        <span class="px-3 text-muted small fw-bold">O</span>
+        <hr class="flex-grow-1 border-secondary opacity-25">
+    </div>
+
+    <div>
+        <small class="text-muted fw-semibold">¿Aún no tienes cuenta gamer?</small><br>
+        <a href="{% url 'registro' %}" class="text-neon-green fw-bold text-decoration-none mt-1 d-inline-block">
+            ¡Regístrate gratis aquí! 🚀
+        </a>
+    </div>
+</div>
+{% endblock %}
