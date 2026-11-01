@@ -30,16 +30,20 @@ def home(request):
             perfil.nivel_dominio = nivel_dominio
         perfil.save()
 
+    # Obtenemos las salas que están esperando oponente
     salas = SalaVirtual.objects.filter(estado='ESPERANDO')[:5]
+    
     return render(request, 'home.html', {
         'perfil': perfil,
         'salas': salas
     })
 
 def sala_duelo_directa(request):
-    """Arena de Duelo 1vs1 Directa"""
+    """Arena de Duelo 1vs1 Directa (Matchmaking)"""
     perfil = get_perfil_activo()
-    pregunta = Pregunta.objects.first()
+    # Obtenemos una pregunta aleatoria para que no sea siempre la misma
+    pregunta = Pregunta.objects.order_by('?').first() 
+    
     return render(request, 'sala_duelo.html', {
         'perfil': perfil,
         'pregunta': pregunta
@@ -49,7 +53,8 @@ def sala_duelo(request, sala_id):
     """Arena de Duelo por Código de Sala"""
     perfil = get_perfil_activo()
     sala = get_object_or_404(SalaVirtual, id=sala_id)
-    pregunta = Pregunta.objects.first()
+    pregunta = Pregunta.objects.order_by('?').first()
+    
     return render(request, 'sala_duelo.html', {
         'perfil': perfil,
         'sala': sala,
@@ -59,7 +64,9 @@ def sala_duelo(request, sala_id):
 def ranking(request):
     """Tabla de Clasificación Global e-Sports"""
     perfil = get_perfil_activo()
+    # Ordenamos de mayor a menor puntaje para el podio
     jugadores = PerfilJugador.objects.all().order_by('-puntos_xp')
+    
     return render(request, 'ranking.html', {
         'perfil': perfil,
         'jugadores': jugadores

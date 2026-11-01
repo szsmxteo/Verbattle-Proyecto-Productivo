@@ -3,37 +3,141 @@
 
 {% block title %}Verbattle — Buscando Oponente{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* =========================================
+       ESTILOS EXCLUSIVOS DEL RADAR DE MATCHMAKING
+       ========================================= */
+    .radar-container {
+        position: relative;
+        width: 180px;
+        height: 180px;
+        margin: 0 auto 30px auto;
+        border-radius: 50%;
+        border: 2px solid rgba(0, 180, 216, 0.3);
+        background: radial-gradient(circle, rgba(27, 38, 59, 1) 0%, rgba(13, 27, 42, 1) 100%);
+        box-shadow: inset 0 0 20px rgba(0, 180, 216, 0.2), 0 0 20px rgba(0, 230, 118, 0.1);
+        overflow: hidden;
+    }
+
+    /* Círculos concéntricos del radar */
+    .radar-circle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        border: 1px solid rgba(0, 180, 216, 0.2);
+    }
+    .rc-1 { width: 60px; height: 60px; }
+    .rc-2 { width: 120px; height: 120px; }
+
+    /* Líneas de cruz (coordenadas) */
+    .radar-cross {
+        position: absolute;
+        background: rgba(0, 180, 216, 0.15);
+    }
+    .cross-h { top: 50%; left: 0; width: 100%; height: 1px; }
+    .cross-v { top: 0; left: 50%; width: 1px; height: 100%; }
+
+    /* Escáner Giratorio */
+    .radar-scanner {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: conic-gradient(from 0deg, rgba(0, 230, 118, 0.5) 0deg, transparent 90deg, transparent 360deg);
+        animation: scan 2s linear infinite;
+    }
+
+    /* Onda expansiva (Ping) */
+    .radar-ping {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 2px solid var(--accent-green);
+        animation: ping 1.5s ease-out infinite;
+        opacity: 0;
+    }
+
+    /* Punto central del jugador */
+    .radar-dot {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 12px;
+        height: 12px;
+        background-color: var(--accent-cyan);
+        border-radius: 50%;
+        box-shadow: 0 0 10px var(--accent-cyan);
+        z-index: 10;
+    }
+
+    /* Animaciones */
+    @keyframes scan {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    @keyframes ping {
+        0% { transform: translate(-50%, -50%) scale(0.2); opacity: 1; }
+        100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0; }
+    }
+    
+    /* Texto parpadeante */
+    .blink-text {
+        animation: blink 1.5s infinite;
+    }
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="vb-card text-center py-5">
-    <!-- Icono de Radar Pulsante -->
-    <div class="my-4">
-        <div class="spinner-grow text-success" style="width: 4rem; height: 4rem;" role="status">
-            <span class="visually-hidden">Buscando...</span>
-        </div>
+    
+    <!-- Radar e-Sports -->
+    <div class="radar-container">
+        <div class="radar-circle rc-1"></div>
+        <div class="radar-circle rc-2"></div>
+        <div class="radar-cross cross-h"></div>
+        <div class="radar-cross cross-v"></div>
+        <div class="radar-scanner"></div>
+        <div class="radar-ping"></div>
+        <div class="radar-dot"></div>
     </div>
 
-    <h4 class="fw-black text-white text-uppercase mb-2">Buscando Oponente 1vs1...</h4>
+    <h4 class="fw-black text-white text-uppercase mb-2" style="letter-spacing: 1px;">Buscando Oponente 1vs1...</h4>
     <p class="text-muted small mb-3">Emparejando con un estudiante de tu mismo nivel de dominio...</p>
 
-    <!-- Indicador de Estado del Emparejamiento -->
-    <div class="text-info fw-bold mb-4 small animate__animated animate__pulse animate__infinite">
+    <!-- Indicador de Estado -->
+    <div class="text-neon-cyan fw-bold mb-4 small blink-text">
         ⚡ ¡Conectando con la sala de competencia...!
     </div>
 
-    <!-- Tarjeta del Jugador Actual en Espera -->
-    <div class="p-3 bg-dark rounded border border-secondary mb-4 mx-auto" style="max-width: 350px;">
+    <!-- Tarjeta del Jugador Actual -->
+    <div class="p-3 rounded border mb-4 mx-auto" style="max-width: 320px; background-color: rgba(13, 27, 42, 0.6); border-color: rgba(0, 180, 216, 0.3) !important;">
         <div class="d-flex align-items-center justify-content-center gap-3">
-            <div class="avatar-box">👾</div>
+            <div class="avatar-box" style="width: 40px; height: 40px; font-size: 1.2rem;">👾</div>
             <div class="text-start">
-                <h6 class="m-0 text-white fw-bold">Gamer_Estudiante</h6>
-                <span class="badge bg-success text-dark fw-bold">NIVEL: BAJO</span>
+                <!-- Usamos la variable de Django con un default por si no hay perfil aún -->
+                <h6 class="m-0 text-white fw-bold">{{ perfil.gamer_tag|default:"Gamer_Estudiante" }}</h6>
+                <span class="badge text-dark fw-bold" style="background-color: var(--accent-green);">NIVEL: {{ perfil.nivel_dominio|default:"BAJO" }}</span>
             </div>
         </div>
     </div>
 
     <!-- Botón para Cancelar Búsqueda -->
     <div>
-        <a href="{% url 'home' %}" class="btn btn-outline-danger btn-lg px-4 rounded-pill fw-bold">
+        <a href="{% url 'home' %}" class="btn btn-outline-danger btn-lg px-4 rounded-pill fw-bold border-2" style="font-size: 0.9rem;">
             ✖️ Cancelar Búsqueda
         </a>
     </div>

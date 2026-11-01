@@ -3,72 +3,138 @@
 
 {% block title %}Verbattle — Ranking Global{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Estilos del Podio */
+    .podium-card {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        border-radius: 12px;
+        margin-bottom: 10px;
+        background-color: #0d1b2a;
+        border: 1px solid rgba(0, 180, 216, 0.2);
+        transition: transform 0.2s;
+    }
+    
+    /* Destacar el Top 1, 2 y 3 */
+    .podium-1 {
+        border-color: #ffd700 !important;
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        background: linear-gradient(90deg, rgba(255, 215, 0, 0.05) 0%, #0d1b2a 100%);
+    }
+    .podium-2 {
+        border-color: #c0c0c0 !important;
+        background: linear-gradient(90deg, rgba(192, 192, 192, 0.05) 0%, #0d1b2a 100%);
+    }
+    .podium-3 {
+        border-color: #cd7f32 !important;
+        background: linear-gradient(90deg, rgba(205, 127, 50, 0.05) 0%, #0d1b2a 100%);
+    }
+
+    .rank-number {
+        font-size: 1.2rem;
+        font-weight: 900;
+        width: 45px;
+        text-align: center;
+    }
+    
+    .rank-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #1b263b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        font-size: 1.2rem;
+        border: 1px solid rgba(0, 180, 216, 0.3);
+    }
+
+    .rank-info {
+        flex-grow: 1;
+        text-align: left;
+    }
+    
+    .rank-name {
+        font-weight: 800;
+        color: #fff;
+        margin: 0;
+        font-size: 1rem;
+    }
+    
+    .rank-badge {
+        font-size: 0.65rem;
+        padding: 2px 8px;
+        border-radius: 8px;
+        font-weight: 900;
+    }
+
+    .rank-xp {
+        font-weight: 900;
+        color: var(--accent-green);
+        font-size: 1.1rem;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Cabecera del Ranking -->
-<div class="vb-card text-center mb-3">
-    <h4 class="fw-black text-info m-0 d-flex align-items-center justify-content-center gap-2">
+<div class="vb-card text-center mb-3" style="background: linear-gradient(135deg, #1b263b 0%, #0d1b2a 100%);">
+    <h4 class="fw-black text-white m-0 d-flex align-items-center justify-content-center gap-2">
         <span>🏆</span> CLASIFICACIÓN GLOBAL <span>🏆</span>
     </h4>
-    <small class="text-muted">Top Jugadores Verbattle 2026</small>
+    <small class="text-neon-cyan fw-bold" style="letter-spacing: 1px;">TOP JUGADORES VERBATTLE 2026</small>
 </div>
 
-<!-- Tabla de Posiciones E-Sports -->
-<div class="vb-card p-2">
-    <div class="table-responsive">
-        <table class="table table-dark table-hover align-middle m-0 text-center">
-            <thead>
-                <tr class="text-success border-bottom border-secondary" style="font-size: 0.85rem;">
-                    <th>POS</th>
-                    <th class="text-start">JUGADOR</th>
-                    <th>NIVEL</th>
-                    <th>PUNTOS</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Puesto #1 -->
-                <tr class="table-active">
-                    <td class="fw-bold text-warning">🥇 #1</td>
-                    <td class="text-start fw-bold text-white">Johan_PO</td>
-                    <td><span class="badge bg-danger text-white">ALTO</span></td>
-                    <td class="fw-black text-info">2,800 PTS</td>
-                </tr>
-                <!-- Puesto #2 (Tú) -->
-                <tr>
-                    <td class="fw-bold text-light">🥈 #2</td>
-                    <td class="text-start fw-bold text-success">Luigi_SM <small class="text-muted">(Tú)</small></td>
-                    <td><span class="badge bg-danger text-white">ALTO</span></td>
-                    <td class="fw-black text-info">2,400 PTS</td>
-                </tr>
-                <!-- Puesto #3 -->
-                <tr>
-                    <td class="fw-bold text-warning-emphasis">🥉 #3</td>
-                    <td class="text-start fw-bold text-white">Oscar_Dev</td>
-                    <td><span class="badge bg-primary text-white">MEDIO</span></td>
-                    <td class="fw-black text-info">1,950 PTS</td>
-                </tr>
-                <!-- Puesto #4 -->
-                <tr>
-                    <td class="fw-bold text-muted">#4</td>
-                    <td class="text-start fw-bold text-white">Kewin_Dev</td>
-                    <td><span class="badge bg-primary text-white">MEDIO</span></td>
-                    <td class="fw-black text-info">1,700 PTS</td>
-                </tr>
-                <!-- Puesto #5 -->
-                <tr>
-                    <td class="fw-bold text-muted">#5</td>
-                    <td class="text-start fw-bold text-white">Joel_Dev</td>
-                    <td><span class="badge bg-primary text-white">MEDIO</span></td>
-                    <td class="fw-black text-info">1,500 PTS</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+<!-- Lista de Posiciones -->
+<div class="vb-card p-3">
+    <!-- Aquí recorremos la variable 'jugadores' que debe enviar la vista views.py -->
+    {% if jugadores %}
+        {% for jugador in jugadores %}
+            <div class="podium-card {% if forloop.counter == 1 %}podium-1{% elif forloop.counter == 2 %}podium-2{% elif forloop.counter == 3 %}podium-3{% endif %}">
+                
+                <!-- Número de Posición -->
+                <div class="rank-number {% if forloop.counter == 1 %}text-warning{% elif forloop.counter == 2 %}text-light{% elif forloop.counter == 3 %}text-warning-emphasis{% else %}text-muted{% endif %}">
+                    {% if forloop.counter == 1 %}🥇{% elif forloop.counter == 2 %}🥈{% elif forloop.counter == 3 %}🥉{% else %}#{{ forloop.counter }}{% endif %}
+                </div>
+
+                <!-- Avatar y Nombre -->
+                <div class="rank-avatar">
+                    {% if forloop.counter == 1 %}👑{% else %}👾{% endif %}
+                </div>
+                <div class="rank-info">
+                    <h6 class="rank-name">{{ jugador.gamer_tag }}</h6>
+                    <!-- Badge de Nivel -->
+                    <span class="badge rank-badge 
+                        {% if jugador.nivel_dominio == 'ALTO' %}bg-danger text-white
+                        {% elif jugador.nivel_dominio == 'MEDIO' %}bg-warning text-dark
+                        {% else %}bg-success text-white{% endif %}">
+                        {{ jugador.nivel_dominio }}
+                    </span>
+                </div>
+
+                <!-- Puntos XP -->
+                <div class="rank-xp">
+                    {{ jugador.puntos_xp }} <span style="font-size: 0.7rem; color: #8E9BAE;">XP</span>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <!-- Mensaje en caso de que no haya jugadores en la BD -->
+        <div class="text-center py-5 text-muted">
+            <div class="fs-1 mb-2">👻</div>
+            <h6 class="text-light fw-bold">El ranking está vacío</h6>
+            <small class="text-secondary">¡Sé el primero en competir y lleva tu nombre a la cima!</small>
+        </div>
+    {% endif %}
 </div>
 
 <!-- Botón de Retorno -->
-<div class="mt-3">
-    <a href="{% url 'home' %}" class="btn btn-verbattle btn-lg text-uppercase">
-        <i class="bi bi-house-door-fill me-2"></i> Volver al Lobby
+<div class="mt-4 mb-4">
+    <a href="{% url 'home' %}" class="btn-verbattle-arcade">
+        🏠 VOLVER AL LOBBY
     </a>
 </div>
 {% endblock %}

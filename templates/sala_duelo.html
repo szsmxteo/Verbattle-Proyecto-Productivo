@@ -8,7 +8,8 @@
 <div class="d-flex justify-content-between align-items-center mb-4 mt-2">
     <div class="text-start">
         <small class="text-muted d-block" style="font-size: 0.7rem; letter-spacing: 1px;">TÚ</small>
-        <strong class="text-neon-cyan fs-6">Gamer_Estudiante</strong>
+        <!-- Mostramos el gamer_tag real -->
+        <strong class="text-neon-cyan fs-6">{{ perfil.gamer_tag|default:"Gamer_Estudiante" }}</strong>
     </div>
     
     <!-- Temporizador Circular Neón -->
@@ -25,7 +26,7 @@
 <!-- Tarjeta de Pregunta -->
 <div class="vb-card text-center mb-4 position-relative overflow-hidden">
     <!-- Línea decorativa superior -->
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--neon-cyan), var(--neon-green));"></div>
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));"></div>
     
     <span class="badge bg-secondary mb-2 text-uppercase" style="letter-spacing: 1px;">
         {{ pregunta.categoria|default:"VOCABULARIO GAMER" }}
@@ -64,9 +65,9 @@
 
 <!-- Botón de Acción Post-Duelo -->
 <div id="acciones-post-duelo" class="mt-4 mb-5 d-none">
-    <a href="{% url 'home' %}" class="btn btn-lg text-uppercase w-100 fw-bold" 
-       style="background-color: var(--neon-cyan); color: #0d1b2a; border: none; border-radius: 10px; box-shadow: 0 0 15px rgba(0, 180, 216, 0.4);">
-        🏠 Volver al Lobby
+    <!-- Usamos btn-verbattle-arcade y le ponemos el emoji y el texto juntos -->
+    <a href="{% url 'home' %}" class="btn-verbattle-arcade w-100 text-uppercase">
+        🏠 VOLVER AL LOBBY
     </a>
 </div>
 {% endblock %}
@@ -75,7 +76,7 @@
 <script>
 // Configuración del Duelo
 let tiempo = 60;
-const respuestaCorrecta = "{{ pregunta.respuesta_correcta|default:'A' }}"; // Toma la respuesta de la BD o 'A' por defecto
+const respuestaCorrecta = "{{ pregunta.respuesta_correcta|default:'A' }}"; 
 const timerElement = document.getElementById('timer');
 
 // Temporizador de 60 segundos
@@ -102,7 +103,7 @@ function responder(opcionSeleccionada) {
     botones.forEach(btn => {
         btn.disabled = true;
         btn.style.cursor = 'not-allowed';
-        btn.style.opacity = '0.7'; // Apagar un poco los no seleccionados
+        btn.style.opacity = '0.7'; 
     });
 
     const feedback = document.getElementById('resultado-feedback');
@@ -111,13 +112,13 @@ function responder(opcionSeleccionada) {
 
     if (opcionSeleccionada === respuestaCorrecta) {
         const btnCorrecto = document.getElementById(`btn-${opcionSeleccionada}`);
-        btnCorrecto.style.borderColor = 'var(--neon-green)';
+        btnCorrecto.style.borderColor = 'var(--accent-green)';
         btnCorrecto.style.backgroundColor = 'rgba(0, 230, 118, 0.1)';
-        btnCorrecto.style.color = 'var(--neon-green)';
+        btnCorrecto.style.color = 'var(--accent-green)';
         btnCorrecto.style.opacity = '1';
 
         feedback.innerHTML = `
-            <div class="vb-card text-center py-2 border-success" style="border-color: var(--neon-green) !important;">
+            <div class="vb-card text-center py-2 border-success" style="border-color: var(--accent-green) !important;">
                 <h5 class="text-neon-green fw-bold mb-0">¡RESPUESTA CORRECTA! 🎯</h5>
                 <small class="text-light">+10 Puntos de XP Ganados</small>
             </div>
@@ -129,7 +130,7 @@ function responder(opcionSeleccionada) {
         btnIncorrecto.style.color = '#ff1744';
         btnIncorrecto.style.opacity = '1';
 
-        document.getElementById(`btn-${respuestaCorrecta}`).style.borderColor = 'var(--neon-green)';
+        document.getElementById(`btn-${respuestaCorrecta}`).style.borderColor = 'var(--accent-green)';
         document.getElementById(`btn-${respuestaCorrecta}`).style.opacity = '1';
 
         feedback.innerHTML = `
@@ -140,8 +141,9 @@ function responder(opcionSeleccionada) {
         `;
     }
 
+    // MOSTRAR EL BOTÓN CORRECTAMENTE
     acciones.classList.remove('d-none');
-    acciones.classList.add('d-flex'); // Para que el botón ocupe el ancho
+    // acciones.classList.add('d-flex'); <--- ELIMINADO. Esto era lo que rompía el diseño.
 }
 
 function finalizarPorTiempo() {
@@ -161,6 +163,8 @@ function finalizarPorTiempo() {
             <small class="text-light">Se acabó el tiempo del turno.</small>
         </div>
     `;
+    
+    // MOSTRAR EL BOTÓN CORRECTAMENTE
     acciones.classList.remove('d-none');
 }
 </script>

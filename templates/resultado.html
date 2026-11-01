@@ -3,39 +3,102 @@
 
 {% block title %}Verbattle — Resultado del Duelo{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Efecto de Brillo para la Tarjeta de Victoria */
+    .victory-card {
+        border: 1px solid var(--accent-green) !important;
+        box-shadow: 0 0 25px rgba(0, 230, 118, 0.15) !important;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Animación de fondo (Ondas expansivas) */
+    .victory-card::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(0, 230, 118, 0.1) 0%, transparent 70%);
+        transform: translate(-50%, -50%);
+        animation: pulse-bg 3s infinite;
+        z-index: 0;
+    }
+
+    @keyframes pulse-bg {
+        0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
+        50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+        100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
+    }
+
+    /* Contenido por encima del fondo */
+    .victory-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Animación del Trofeo */
+    .trophy-icon {
+        display: inline-block;
+        animation: float 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Tarjeta Gamer de Resumen de Partida -->
-<div class="vb-card text-center py-4 border-success">
-    <div class="fs-1 mb-2">🏆</div>
-    <h3 class="fw-black text-success text-uppercase mb-3">¡Victoria en el Duelo!</h3>
+<div class="vb-card text-center py-4 victory-card mt-4">
     
-    <div class="my-3 p-3 bg-dark rounded border border-secondary">
-        <div class="d-flex justify-content-around align-items-center">
-            <div>
-                <small class="text-muted d-block fw-bold">TU PUNTAJE</small>
-                <span class="fs-4 fw-black text-success">+300 PTS</span>
-            </div>
-            <div class="border-end border-secondary" style="height: 40px;"></div>
-            <div>
-                <small class="text-muted d-block fw-bold">RIVAL</small>
-                <span class="fs-4 fw-black text-danger">0 PTS</span>
+    <div class="victory-content">
+        <div class="fs-1 mb-2 trophy-icon">🏆</div>
+        <h3 class="fw-black text-neon-green text-uppercase mb-3" style="letter-spacing: 1px;">¡Victoria en el Duelo!</h3>
+        
+        <!-- Tabla de Puntajes -->
+        <div class="my-3 p-3 rounded" style="background-color: rgba(13, 27, 42, 0.8); border: 1px solid rgba(0, 180, 216, 0.3);">
+            <div class="d-flex justify-content-around align-items-center">
+                <div>
+                    <small class="text-muted d-block fw-bold" style="font-size: 0.7rem; letter-spacing: 1px;">TU PUNTAJE</small>
+                    <!-- Usamos la variable de XP total del jugador -->
+                    <span class="fs-4 fw-black text-neon-green">{{ perfil.puntos_xp|default:0 }} <small style="font-size: 0.8rem;">XP</small></span>
+                </div>
+                <div class="border-end border-secondary" style="height: 40px;"></div>
+                <div>
+                    <small class="text-muted d-block fw-bold" style="font-size: 0.7rem; letter-spacing: 1px;">RIVAL</small>
+                    <span class="fs-4 fw-black text-danger">0 XP</span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="alert alert-success bg-dark border-success text-success fw-bold my-3">
-        🔥 ¡Aumentaste tu racha a 3 victorias consecutivas!
-    </div>
+        <!-- Mensaje Motivacional -->
+        <div class="alert fw-bold my-3" style="background-color: rgba(0, 230, 118, 0.1); border: 1px solid var(--accent-green); color: var(--accent-green);">
+            🔥 ¡Aumentaste tu racha de victorias!
+        </div>
 
-    <div class="text-info fw-black fs-5 my-2">
-        Nuevo Puntaje Global: 1,700 PTS
+        <!-- Resumen de Stats -->
+        <div class="d-flex justify-content-center gap-4 text-light mt-3 small fw-bold">
+            <span>🏆 Victorias: {{ perfil.victorias|default:0 }}</span>
+            <span>💀 Derrotas: {{ perfil.derrotas|default:0 }}</span>
+        </div>
     </div>
 </div>
 
-<!-- Botón de Retorno -->
-<div class="mt-4">
-    <a href="{% url 'home' %}" class="btn btn-verbattle btn-lg text-uppercase">
-        <i class="bi bi-house-door-fill me-2"></i> Volver al Lobby
+<!-- Botones de Acción -->
+<div class="mt-4 mb-5 d-grid gap-3">
+    <!-- Botón de Revancha -->
+    <a href="{% url 'matchmaking' %}" class="btn-verbattle-arcade">
+        ⚔️ ¡JUGAR REVANCHA!
+    </a>
+    
+    <!-- Botón de Volver al Lobby -->
+    <a href="{% url 'home' %}" class="btn btn-outline-light btn-lg rounded-pill fw-bold border-2" style="font-size: 0.9rem;">
+        🏠 Volver al Lobby
     </a>
 </div>
 {% endblock %}
