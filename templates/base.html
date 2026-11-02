@@ -7,6 +7,8 @@
     <meta name="description" content="Verbatle - Plataforma de desafíos lingüísticos 1vs1 en tiempo real. e-Sports educativos.">
     <title>{% block title %}Verbatle App{% endblock %}</title>
 
+    <link rel="icon" type="image/png" href="{% static 'img/logo-icon.png' %}">
+
     <!-- Estilos Oficiales Verbatle (Local v4) -->
     <link rel="stylesheet" href="{% static 'css/verbattle-theme.css' %}?v=4">
     
@@ -20,13 +22,19 @@
 
     <!-- Navbar Superior (XP y Logo) -->
     <nav class="navbar-verbattle" style="position: sticky; top: 0; z-index: 1000;">
-        <a class="brand-text" href="{% url 'home' %}">
-            VER<span>BATTLE</span> 🕹️
-        </a>
-        <span class="xp-badge">
-            ⚡ {{ perfil.puntos_xp|default:0 }} XP
+    <a class="brand-text d-flex align-items-center text-decoration-none" href="{% url 'home' %}">
+        <!-- Icono de las espadas -->
+        <img src="{% static 'img/logo-icon.png' %}" alt="Verbatle Logo" style="height: 40px; width: 40px; margin-right: 10px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 230, 118, 0.3);">
+        
+        <!-- Texto (se oculta en pantallas muy pequeñas) -->
+        <span class="d-none d-sm-inline" style="font-weight: 900; letter-spacing: 1px; color: #FFFFFF; margin: 0;">
+            VER<span style="color: var(--accent-green);">BATTLE</span>
         </span>
-    </nav>
+    </a>
+    <span class="xp-badge">
+        ⚡ {{ perfil.puntos_xp|default:0 }} XP
+    </span>
+</nav>
 
     <!-- Contenedor Principal Mobile-First (Máx 500px) -->
     <main class="vb-container my-3">
