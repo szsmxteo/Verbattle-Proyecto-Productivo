@@ -10,9 +10,9 @@
     --bg-card: #1b263b;
     --accent-green: #00e676;
     --accent-blue: #00b4d8;
-    --danger-red: #ff1744; /* Color para respuestas incorrectas */
+    --danger-red: #ff1744;
     --text-light: #f8f9fa;
-    --font-main: 'Montserrat', system-ui, -apple-system, sans-serif; /* Fuente oficial */
+    --font-main: 'Montserrat', system-ui, -apple-system, sans-serif;
 }
 
 body.body-verbattle {
@@ -21,7 +21,7 @@ body.body-verbattle {
     font-family: var(--font-main) !important;
     min-height: 100vh;
     margin: 0;
-    padding-bottom: 90px; /* Espacio para el bottom nav */
+    padding-bottom: 90px;
 }
 
 /* Reset Global de Enlaces */
@@ -57,7 +57,8 @@ a, a:visited, a:hover, a:active {
 .navbar-verbattle {
     background-color: #08111d;
     border-bottom: 2px solid var(--accent-blue);
-    padding: 12px 16px;
+    /* Ajuste de padding para que el logo respire: más a los lados */
+    padding: 10px 20px; 
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
@@ -69,10 +70,22 @@ a, a:visited, a:hover, a:active {
     letter-spacing: 1px;
     font-size: 1.2rem;
     color: #FFFFFF !important;
+    display: flex !important;
+    align-items: center !important;
 }
 
 .brand-text span {
     color: var(--accent-green) !important;
+}
+
+/* Ajuste específico para la imagen del logo en el Navbar */
+.navbar-verbattle .brand-text img {
+    object-fit: contain;
+    height: 38px; /* Altura fija para que no se deforme */
+    width: 38px;
+    margin-right: 12px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 230, 118, 0.3);
 }
 
 .xp-badge {
@@ -228,13 +241,13 @@ a, a:visited, a:hover, a:active {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    border: 3px solid var(--accent-cyan, #00b4d8);
+    border: 3px solid var(--accent-blue);
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: 800;
     font-size: 1.5rem;
-    color: var(--accent-cyan, #00b4d8);
+    color: var(--accent-blue);
     box-shadow: 0 0 10px rgba(0, 180, 216, 0.4), inset 0 0 10px rgba(0, 180, 216, 0.2);
     transition: all 0.3s ease;
     margin: 0 auto;
