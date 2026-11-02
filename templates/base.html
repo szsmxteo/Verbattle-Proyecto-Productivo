@@ -7,12 +7,13 @@
     <meta name="description" content="Verbatle - Plataforma de desafíos lingüísticos 1vs1 en tiempo real. e-Sports educativos.">
     <title>{% block title %}Verbatle App{% endblock %}</title>
 
+    <!-- Favicon Oficial -->
     <link rel="icon" type="image/png" href="{% static 'img/logo-icon.png' %}">
 
-    <!-- Estilos Oficiales Verbatle (Local v4) -->
-    <link rel="stylesheet" href="{% static 'css/verbattle-theme.css' %}?v=4">
+    <!-- Estilos Oficiales Verbatle -->
+    <link rel="stylesheet" href="{% static 'css/verbattle-theme.css' %}?v=5">
     
-    <!-- Bootstrap 5 CSS (Para grillas, flexbox y utilidades) -->
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- Bloque para CSS específico de cada pantalla -->
@@ -22,19 +23,21 @@
 
     <!-- Navbar Superior (XP y Logo) -->
     <nav class="navbar-verbattle" style="position: sticky; top: 0; z-index: 1000;">
-    <a class="brand-text d-flex align-items-center text-decoration-none" href="{% url 'home' %}">
-        <!-- Icono de las espadas -->
-        <img src="{% static 'img/logo-icon.png' %}" alt="Verbatle Logo" style="height: 40px; width: 40px; margin-right: 10px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 230, 118, 0.3);">
-        
-        <!-- Texto (se oculta en pantallas muy pequeñas) -->
-        <span class="d-none d-sm-inline" style="font-weight: 900; letter-spacing: 1px; color: #FFFFFF; margin: 0;">
-            VER<span style="color: var(--accent-green);">BATTLE</span>
+        <a class="brand-text d-flex align-items-center text-decoration-none" href="{% url 'home' %}">
+            
+            <!-- LOGO CON TAMAÑO FORZADO EN HTML -->
+            <img src="{% static 'img/logo-icon.png' %}" alt="Verbatle Logo" 
+                 style="height: 38px; width: 38px; margin-right: 10px; border-radius: 8px; object-fit: contain; box-shadow: 0 0 10px rgba(0, 230, 118, 0.3);">
+            
+            <!-- Texto (se oculta en pantallas muy pequeñas) -->
+            <span class="d-none d-md-inline" style="font-weight: 900; letter-spacing: 1px; color: #FFFFFF; margin: 0;">
+                VER<span style="color: var(--accent-green);">BATTLE</span>
+            </span>
+        </a>
+        <span class="xp-badge">
+            ⚡ {{ perfil.puntos_xp|default:0 }} XP
         </span>
-    </a>
-    <span class="xp-badge">
-        ⚡ {{ perfil.puntos_xp|default:0 }} XP
-    </span>
-</nav>
+    </nav>
 
     <!-- Contenedor Principal Mobile-First (Máx 500px) -->
     <main class="vb-container my-3">
@@ -44,7 +47,6 @@
 
     <!-- Barra de Navegación Inferior Flotante -->
     <nav class="bottom-nav-fixed">
-        <!-- Validamos la URL actual para pintar la pestaña activa -->
         <a href="{% url 'home' %}" class="nav-link-mobile {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
             <span>🏠 Lobby</span>
         </a>
