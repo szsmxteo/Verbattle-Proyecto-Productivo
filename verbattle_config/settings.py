@@ -1,23 +1,53 @@
 """
 Django settings for verbattle_config project.
 Proyecto Productivo Verbattle - Colegio León de Greiff IED
+
+Los valores sensibles se leen del archivo .env (ver .env.example).
 """
 
+import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django.core.exceptions import ImproperlyConfigured
+from dotenv import load_dotenv
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-SECRET_KEY = "django-insecure-%3_zaz=o=j*_%*ow3at$a2$4b+100bh1ym-gtgr&&aa&u2qxif"
-
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
+load_dotenv(BASE_DIR / ".env")
 
 
-# Application definition
+def env_list(name, default=""):
+    """Lee una lista separada por comas desde una variable de entorno."""
+    return [item.strip() for item in os.getenv(name, default).split(",") if item.strip()]
 
+
+# ---------------------------------------------------------------------------
+# Seguridad
+# ---------------------------------------------------------------------------
+DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
+
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+if not SECRET_KEY:
+    if DEBUG:
+        # Solo para desarrollo local. Nunca se usa con DEBUG=False.
+        SECRET_KEY = "dev-only-insecure-key-no-usar-en-produccion"
+    else:
+        raise ImproperlyConfigured(
+            "Falta DJANGO_SECRET_KEY. Copia .env.example a .env y complétalo."
+        )
+
+ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1")
+CSRF_TRUSTED_ORIGINS = env_list("DJANGO_CSRF_TRUSTED_ORIGINS")
+
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+
+
+# ---------------------------------------------------------------------------
+# Aplicaciones
+# ---------------------------------------------------------------------------
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -25,9 +55,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    
+
     # Frontend
-    'verbattle',  
+    "verbattle",
 
     # Backend
     "core",
@@ -48,15 +78,15 @@ ROOT_URLCONF = "verbattle_config.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
@@ -65,51 +95,62 @@ TEMPLATES = [
 WSGI_APPLICATION = "verbattle_config.wsgi.application"
 
 
-# Database (SQLite3 para desarrollo local)
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+# ---------------------------------------------------------------------------
+# Base de datos
+# SQLite por defecto (desarrollo). Si defines DB_NAME en .env, usa MySQL.
+# ---------------------------------------------------------------------------
+if os.getenv("DB_NAME"):
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": os.getenv("DB_NAME"),
+            "USER": os.getenv("DB_USER", "root"),
+            "PASSWORD": os.getenv("DB_PASSWORD", ""),
+            "HOST": os.getenv("DB_HOST", "localhost"),
+            "PORT": os.getenv("DB_PORT", "3306"),
+            "OPTIONS": {"charset": "utf8mb4"},
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-# Password validation
+# ---------------------------------------------------------------------------
+# Validación de contraseñas
+# ---------------------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 
-# Internationalization (Configuración Oficial Colombia)
+# ---------------------------------------------------------------------------
+# Internacionalización (Colombia)
+# ---------------------------------------------------------------------------
 LANGUAGE_CODE = "es-co"
-
 TIME_ZONE = "America/Bogota"
-
 USE_I18N = True
-
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# ---------------------------------------------------------------------------
+# Archivos estáticos
+# ---------------------------------------------------------------------------
 STATIC_URL = "static/"
-
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
-
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
-# Email Configuration
+# ---------------------------------------------------------------------------
+# Correo (en consola durante el desarrollo)
+# ---------------------------------------------------------------------------
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

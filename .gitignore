@@ -1,5 +1,22 @@
-db.sqlite3
+# Entornos virtuales
 .venv/
 .venv-1/
+venv/
+
+# Python
 __pycache__/
 *.py[cod]
+
+# Variables de entorno y secretos
+.env
+
+# Django
+db.sqlite3
+staticfiles/
+media/
+*.log
+
+# Editores y sistema
+.vscode/
+.idea/
+.DS_Store
