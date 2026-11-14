@@ -1,11 +1,6 @@
-```
 # ⚡ VERBATTLE — Desafíos Lingüísticos 1vs1
 
-<p align="center">
-  
-</p>
-
-&gt; **Verbattle** es una plataforma gamificada de aprendizaje lingüístico orientada al público adolescente y gamer. Permite conectar a dos estudiantes en una sala virtual en tiempo real para resolver retos de vocabulario, velocidad y gramática en inglés y español.
+> **Verbattle** es una plataforma gamificada de aprendizaje lingüístico orientada al público adolescente y gamer. Permite conectar a dos estudiantes en una sala virtual en tiempo real para resolver retos de vocabulario, velocidad y gramática en inglés y español.
 
 ---
 
@@ -29,11 +24,11 @@
 
 ## 🛠️ Stack Tecnológico
 * **Lenguajes:** Python 3.10+ / HTML5 / CSS3 / JavaScript
-* **Framework Web:** Django 4.2 (Arquitectura MVT)
-* **Base de Datos:** MySQL Server 8.0
+* **Framework Web:** Django 5.2 LTS (Arquitectura MVT)
+* **Base de Datos:** SQLite en desarrollo / MySQL 8.0 (opcional, se activa desde `.env`)
 * **Estilos Visuales:** Paleta e-sports (`#0D1B2A`, `#00E676`, `#00B4D8`) + Tipografía Montserrat
 * **Prototipado:** Tkinter (Escritorio) / Figma (UI-UX)
-* **Entorno y Control de Versiones:** Git &amp; GitHub Codespaces
+* **Entorno y Control de Versiones:** Git & GitHub Codespaces
 
 ---
 
@@ -44,29 +39,45 @@
 
 ---
 
-## 💻 Cómo ejecutar el prototipo de escritorio (Tkinter)
+## 💻 Instalación y ejecución
+
+### 1. Clonar el repositorio
 ```bash
-# 1. Clonar el repositorio
-git clone [suspicious link removed]
-
-# 2. Entrar a la carpeta del proyecto
+git clone https://github.com/szsmxteo/Verbattle-Proyecto-Productivo.git
 cd Verbattle-Proyecto-Productivo
-
-# 3. Ejecutar el prototipo
-python verbattle_prototype.py
-
 ```
 
+### 2. Prototipo de escritorio (Tkinter)
+```bash
+python verbattle_prototype.py
+```
+
+### 3. Aplicación web (Django)
+```bash
+# Crear y activar entorno virtual
+python -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
+
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Configurar variables de entorno
+cp .env.example .env            # luego edita .env con tus datos
+
+# Crear tablas y arrancar
+python manage.py migrate
+python manage.py runserver
 ```
 
 ---
 
-### 🚀 Pasos para publicar la actualización en GitHub desde la Terminal
+## 🌿 Flujo de trabajo con ramas
+1. Cada integrante trabaja en su rama (`rama-backend`, `rama-frontend`, `rama-testing`, `rama-docs`).
+2. Al terminar una tarea, se abre un **Pull Request** hacia `main`.
+3. Otro integrante revisa y aprueba antes de hacer merge.
+4. Nadie hace `push` directo a `main`.
 
-Una vez reemplazado el texto en el archivo **`README.md`** y guardado con `Ctrl + S`, ejecuta estos comandos en tu terminal de VS Code / Codespaces [3, 4]:
-
+## 🧪 Pruebas
 ```bash
-git add README.md
-git commit -m "Docs: Actualización del README.md con roles oficiales del equipo y ramas de trabajo"
-git push origin main
+python manage.py test
 ```
