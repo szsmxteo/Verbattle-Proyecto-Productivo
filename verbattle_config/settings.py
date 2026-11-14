@@ -56,12 +56,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # Frontend
-    "verbattle",
 
-    # Backend
     "core",
-    "verbattle_app",
 ]
 
 MIDDLEWARE = [
