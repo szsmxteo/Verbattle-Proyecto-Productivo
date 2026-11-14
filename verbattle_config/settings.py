@@ -150,3 +150,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # Correo (en consola durante el desarrollo)
 # ---------------------------------------------------------------------------
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# Autenticación
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "login"

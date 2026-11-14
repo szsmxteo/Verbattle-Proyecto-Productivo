@@ -43,6 +43,7 @@
 {% endblock %}
 
 {% block content %}
+<form action="{% url "logout" %}" method="post" class="text-end mb-2">{% csrf_token %}<button type="submit" class="btn btn-sm btn-outline-light">Salir</button></form>
 <!-- Tarjeta Gamer de Perfil de Jugador -->
 <div class="vb-card">
     <div class="profile-header">
