@@ -69,6 +69,28 @@
             <div class="stat-desc">Derrotas</div>
         </div>
     </div>
+
+    <!-- NUEVA TARJETA DE RACHA (STREAK) -->
+    <div class="streak-container mt-3">
+        <div class="streak-header">
+            <span class="streak-fire">🔥</span>
+            
+            <div class="streak-text">
+                <strong class="text-neon-orange">Racha de {{ perfil.racha_actual|default:0 }} Días</strong>
+                <small class="text-muted">¡Sigue jugando para no perderla!</small>
+            </div>
+            
+            <span class="badge bg-warning text-dark fw-bold pulse-badge">¡ACTIVA!</span>
+        </div>
+        
+        <div class="progress mt-3" style="height: 8px; background-color: #0d1b2a;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" 
+                 role="progressbar" 
+                 style="width: 75%;" 
+                 aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Botón Arcade Principal "Buscar Duelo" -->
@@ -94,10 +116,9 @@
                 <div>
                     <strong class="text-white" style="font-size: 1.1rem;">Sala #{{ sala.codigo_sala }}</strong>
                     <div class="small text-muted mt-1">
-                        👤 Anfitrión: {{ sala.jugador1.username|default:"Jugador 1" }}
+                        👤 Anfitrión: {{ sala.jugador1.gamer_tag|default:"Jugador 1" }}
                     </div>
                 </div>
-                <!-- Asegúrate de que la URL coincida con tu urls.py -->
                 <a href="{% url 'sala_duelo_directa' %}" class="btn btn-sm btn-unirse rounded-pill fw-bold px-3">
                     Unirse ⚔️
                 </a>
