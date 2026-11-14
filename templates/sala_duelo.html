@@ -1,17 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Arena 1vs1 - Verbatle{% endblock %}
+{% block title %}Arena 1vs1 - Verbattle{% endblock %}
 
 {% block content %}
 <!-- Cabecera de la Batalla (Gamer vs Rival) -->
 <div class="d-flex justify-content-between align-items-center mb-4 mt-2">
     <div class="text-start">
         <small class="text-muted d-block" style="font-size: 0.7rem; letter-spacing: 1px;">TÚ</small>
-        <!-- Mostramos el gamer_tag real -->
         <strong class="text-neon-cyan fs-6">{{ perfil.gamer_tag|default:"Gamer_Estudiante" }}</strong>
     </div>
-    
+
     <!-- Temporizador Circular Neón -->
     <div class="timer-circle">
         <span id="timer">60</span>
@@ -23,49 +22,50 @@
     </div>
 </div>
 
+{% if pregunta %}
 <!-- Tarjeta de Pregunta -->
 <div class="vb-card text-center mb-4 position-relative overflow-hidden">
-    <!-- Línea decorativa superior -->
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));"></div>
-    
+
     <span class="badge bg-secondary mb-2 text-uppercase" style="letter-spacing: 1px;">
         {{ pregunta.categoria|default:"VOCABULARIO GAMER" }}
     </span>
     <h5 class="fw-bold mt-2 mb-3 text-light px-2" style="line-height: 1.5;">
-        {% if pregunta %}
-            {{ pregunta.enunciado }}
-        {% else %}
-            ¿Cómo se dice "Duelo intelectual rápido" o "Desafío" en inglés?
-        {% endif %}
+        {{ pregunta.enunciado }}
     </h5>
 </div>
 
 <!-- Opciones de Respuesta (A, B, C, D) -->
 <div id="opciones-container">
-    <button class="vb-btn" id="btn-A" onclick="responder('A')">
-        <span class="badge bg-dark border border-info text-info me-2 fs-6" style="width: 28px;">A</span> 
-        {% if pregunta %}{{ pregunta.opcion_a }}{% else %}Challenge / Fast Duel{% endif %}
+    <button class="vb-btn" id="btn-A" onclick="enviar('A')">
+        <span class="badge bg-dark border border-info text-info me-2 fs-6" style="width: 28px;">A</span>
+        {{ pregunta.opcion_a }}
     </button>
-    <button class="vb-btn" id="btn-B" onclick="responder('B')">
-        <span class="badge bg-dark border border-info text-info me-2 fs-6" style="width: 28px;">B</span> 
-        {% if pregunta %}{{ pregunta.opcion_b }}{% else %}Static Lesson{% endif %}
+    <button class="vb-btn" id="btn-B" onclick="enviar('B')">
+        <span class="badge bg-dark border border-info text-info me-2 fs-6" style="width: 28px;">B</span>
+        {{ pregunta.opcion_b }}
     </button>
-    <button class="vb-btn" id="btn-C" onclick="responder('C')">
-        <span class="badge bg-dark border border-info text-info me-2 fs-6" style="width: 28px;">C</span> 
-        {% if pregunta %}{{ pregunta.opcion_c }}{% else %}Boring Exam{% endif %}
+    <button class="vb-btn" id="btn-C" onclick="enviar('C')">
+        <span class="badge bg-dark border border-info text-info me-2 fs-6" style="width: 28px;">C</span>
+        {{ pregunta.opcion_c }}
     </button>
-    <button class="vb-btn" id="btn-D" onclick="responder('D')">
-        <span class="badge bg-dark border border-info text-info me-2 fs-6" style="width: 28px;">D</span> 
-        {% if pregunta %}{{ pregunta.opcion_d }}{% else %}Slow Process{% endif %}
+    <button class="vb-btn" id="btn-D" onclick="enviar('D')">
+        <span class="badge bg-dark border border-info text-info me-2 fs-6" style="width: 28px;">D</span>
+        {{ pregunta.opcion_d }}
     </button>
 </div>
+{% else %}
+<div class="vb-card text-center mb-4 py-3">
+    <h5 class="text-warning fw-bold mb-2">Aún no hay preguntas</h5>
+    <small class="text-light">Agrega preguntas desde el panel de administración para poder jugar.</small>
+</div>
+{% endif %}
 
 <!-- Mensaje de Resultado Dinámico -->
 <div id="resultado-feedback" class="mt-3 text-center d-none"></div>
 
 <!-- Botón de Acción Post-Duelo -->
-<div id="acciones-post-duelo" class="mt-4 mb-5 d-none">
-    <!-- Usamos btn-verbattle-arcade y le ponemos el emoji y el texto juntos -->
+<div id="acciones-post-duelo" class="mt-4 mb-5{% if pregunta %} d-none{% endif %}">
     <a href="{% url 'home' %}" class="btn-verbattle-arcade w-100 text-uppercase">
         🏠 VOLVER AL LOBBY
     </a>
@@ -73,99 +73,116 @@
 {% endblock %}
 
 {% block extra_js %}
+{% if pregunta %}
 <script>
-// Configuración del Duelo
-let tiempo = 60;
-const respuestaCorrecta = "{{ pregunta.respuesta_correcta|default:'A' }}"; 
-const timerElement = document.getElementById('timer');
+const CSRF_TOKEN = "{{ csrf_token }}";
+const URL_RESPONDER = "{% url 'responder' %}";
+const VERDE = 'var(--accent-green)';
+const ROJO = '#ff1744';
 
-// Temporizador de 60 segundos
+let tiempo = 60;
+let respondido = false;
+const timerElement = document.getElementById('timer');
+const botones = document.querySelectorAll('.vb-btn');
+const feedback = document.getElementById('resultado-feedback');
+const acciones = document.getElementById('acciones-post-duelo');
+
+// Temporizador visual (el servidor mide el tiempo real por su cuenta)
 const interval = setInterval(() => {
     tiempo--;
     timerElement.innerText = tiempo;
-    
-    // Efecto visual cuando el tiempo se agota
+
     if (tiempo <= 10) {
-        timerElement.style.color = '#ff1744';
+        timerElement.style.color = ROJO;
         timerElement.style.textShadow = '0 0 10px rgba(255, 23, 68, 0.8)';
     }
 
     if (tiempo <= 0) {
-        clearInterval(interval);
-        finalizarPorTiempo();
+        enviar('');
     }
 }, 1000);
 
-function responder(opcionSeleccionada) {
+function pintarBoton(letra, color, fondo) {
+    const btn = document.getElementById('btn-' + letra);
+    if (!btn) return;
+    btn.style.borderColor = color;
+    btn.style.color = color;
+    btn.style.opacity = '1';
+    if (fondo) btn.style.backgroundColor = fondo;
+}
+
+// Envía la respuesta al servidor; una cadena vacía significa "tiempo agotado"
+async function enviar(opcion) {
+    if (respondido) return;
+    respondido = true;
     clearInterval(interval);
 
-    const botones = document.querySelectorAll('.vb-btn');
     botones.forEach(btn => {
         btn.disabled = true;
         btn.style.cursor = 'not-allowed';
-        btn.style.opacity = '0.7'; 
+        btn.style.opacity = '0.7';
     });
 
-    const feedback = document.getElementById('resultado-feedback');
-    const acciones = document.getElementById('acciones-post-duelo');
+    try {
+        const respuesta = await fetch(URL_RESPONDER, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': CSRF_TOKEN,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({ opcion: opcion })
+        });
+        if (!respuesta.ok) throw new Error('HTTP ' + respuesta.status);
+        const datos = await respuesta.json();
+        mostrarResultado(opcion, datos);
+    } catch (error) {
+        mostrarError();
+    }
+}
+
+function mostrarResultado(opcion, datos) {
     feedback.classList.remove('d-none');
 
-    if (opcionSeleccionada === respuestaCorrecta) {
-        const btnCorrecto = document.getElementById(`btn-${opcionSeleccionada}`);
-        btnCorrecto.style.borderColor = 'var(--accent-green)';
-        btnCorrecto.style.backgroundColor = 'rgba(0, 230, 118, 0.1)';
-        btnCorrecto.style.color = 'var(--accent-green)';
-        btnCorrecto.style.opacity = '1';
-
+    if (datos.estado === 'correcta') {
+        pintarBoton(opcion, VERDE, 'rgba(0, 230, 118, 0.1)');
         feedback.innerHTML = `
             <div class="vb-card text-center py-2 border-success" style="border-color: var(--accent-green) !important;">
                 <h5 class="text-neon-green fw-bold mb-0">¡RESPUESTA CORRECTA! 🎯</h5>
-                <small class="text-light">+10 Puntos de XP Ganados</small>
+                <small class="text-light">+${datos.xp_ganado} Puntos de XP · Total: ${datos.puntos_xp} XP</small>
             </div>
         `;
-    } else {
-        const btnIncorrecto = document.getElementById(`btn-${opcionSeleccionada}`);
-        btnIncorrecto.style.borderColor = '#ff1744';
-        btnIncorrecto.style.backgroundColor = 'rgba(255, 23, 68, 0.1)';
-        btnIncorrecto.style.color = '#ff1744';
-        btnIncorrecto.style.opacity = '1';
-
-        document.getElementById(`btn-${respuestaCorrecta}`).style.borderColor = 'var(--accent-green)';
-        document.getElementById(`btn-${respuestaCorrecta}`).style.opacity = '1';
-
+    } else if (datos.estado === 'incorrecta') {
+        pintarBoton(opcion, ROJO, 'rgba(255, 23, 68, 0.1)');
+        pintarBoton(datos.respuesta_correcta, VERDE, null);
         feedback.innerHTML = `
             <div class="vb-card text-center py-2 border-danger" style="border-color: #ff1744 !important;">
                 <h5 class="text-danger fw-bold mb-0">¡RESPUESTA INCORRECTA! ❌</h5>
-                <small class="text-light">La opción correcta era la <strong class="text-neon-green">${respuestaCorrecta}</strong>.</small>
+                <small class="text-light">La opción correcta era la <strong class="text-neon-green">${datos.respuesta_correcta}</strong>.</small>
+            </div>
+        `;
+    } else {
+        pintarBoton(datos.respuesta_correcta, VERDE, null);
+        feedback.innerHTML = `
+            <div class="vb-card text-center py-2 border-warning" style="border-color: #ffb300 !important;">
+                <h5 class="text-warning fw-bold mb-0">¡TIEMPO AGOTADO! ⏱️</h5>
+                <small class="text-light">La opción correcta era la <strong class="text-neon-green">${datos.respuesta_correcta}</strong>.</small>
             </div>
         `;
     }
 
-    // MOSTRAR EL BOTÓN CORRECTAMENTE
     acciones.classList.remove('d-none');
-    // acciones.classList.add('d-flex'); <--- ELIMINADO. Esto era lo que rompía el diseño.
 }
 
-function finalizarPorTiempo() {
-    const botones = document.querySelectorAll('.vb-btn');
-    botones.forEach(btn => {
-        btn.disabled = true;
-        btn.style.opacity = '0.5';
-    });
-
-    const feedback = document.getElementById('resultado-feedback');
-    const acciones = document.getElementById('acciones-post-duelo');
+function mostrarError() {
     feedback.classList.remove('d-none');
-
     feedback.innerHTML = `
         <div class="vb-card text-center py-2 border-warning" style="border-color: #ffb300 !important;">
-            <h5 class="text-warning fw-bold mb-0">¡TIEMPO AGOTADO! ⏱️</h5>
-            <small class="text-light">Se acabó el tiempo del turno.</small>
+            <h5 class="text-warning fw-bold mb-0">No se pudo registrar tu respuesta</h5>
+            <small class="text-light">Vuelve al lobby e inténtalo de nuevo.</small>
         </div>
     `;
-    
-    // MOSTRAR EL BOTÓN CORRECTAMENTE
     acciones.classList.remove('d-none');
 }
 </script>
+{% endif %}
 {% endblock %}

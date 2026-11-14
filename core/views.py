@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import F
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -11,6 +12,10 @@ from django.views.decorators.http import require_POST
 
 from .forms import RegistroForm
 from .models import PerfilJugador, Pregunta, SalaVirtual
+
+TIEMPO_LIMITE = 60      # segundos que dura cada pregunta
+MARGEN_SEGUNDOS = 5     # tolerancia por la demora de la red
+XP_POR_ACIERTO = 10
 
 
 # ==========================================
@@ -100,6 +105,77 @@ def logout_view(request):
 
 
 # ==========================================
+# DUELO: la respuesta se comprueba en el servidor
+# ==========================================
+
+def iniciar_duelo(request, pregunta):
+    """Anota en la sesión qué pregunta se mostró y cuándo, para validar la respuesta."""
+    if pregunta:
+        request.session["duelo"] = {
+            "pregunta_id": pregunta.id,
+            "inicio": timezone.now().timestamp(),
+            "respondida": False,
+        }
+    else:
+        request.session.pop("duelo", None)
+
+
+@login_required
+@require_POST
+def responder(request):
+    """Comprueba la respuesta y guarda XP, victorias y derrotas."""
+    duelo = request.session.get("duelo")
+    if not duelo or duelo.get("respondida"):
+        return JsonResponse({"error": "No hay una pregunta activa."}, status=400)
+
+    pregunta = Pregunta.objects.filter(pk=duelo["pregunta_id"]).first()
+    if pregunta is None:
+        return JsonResponse({"error": "La pregunta ya no existe."}, status=400)
+
+    opcion = request.POST.get("opcion", "").strip().upper()
+    if opcion not in ("", "A", "B", "C", "D"):
+        return JsonResponse({"error": "Opción no válida."}, status=400)
+
+    # Se marca como respondida ANTES de dar puntos, para no cobrar dos veces.
+    duelo["respondida"] = True
+    request.session["duelo"] = duelo
+
+    transcurrido = timezone.now().timestamp() - duelo["inicio"]
+    a_tiempo = transcurrido <= TIEMPO_LIMITE + MARGEN_SEGUNDOS
+    letra_correcta = pregunta.respuesta_correcta.strip().upper()
+
+    if opcion == "" or not a_tiempo:
+        estado = "tiempo"
+    elif opcion == letra_correcta:
+        estado = "correcta"
+    else:
+        estado = "incorrecta"
+
+    perfil = get_perfil_activo(request)
+    xp_ganado = XP_POR_ACIERTO if estado == "correcta" else 0
+    if estado == "correcta":
+        cambios = {
+            "puntos_xp": F("puntos_xp") + xp_ganado,
+            "victorias": F("victorias") + 1,
+        }
+    else:
+        cambios = {"derrotas": F("derrotas") + 1}
+    PerfilJugador.objects.filter(pk=perfil.pk).update(**cambios)
+    perfil.refresh_from_db()
+
+    return JsonResponse(
+        {
+            "estado": estado,
+            "respuesta_correcta": letra_correcta,
+            "xp_ganado": xp_ganado,
+            "puntos_xp": perfil.puntos_xp,
+            "victorias": perfil.victorias,
+            "derrotas": perfil.derrotas,
+        }
+    )
+
+
+# ==========================================
 # VISTAS DE LAS PANTALLAS (requieren sesión)
 # ==========================================
 
@@ -127,6 +203,7 @@ def sala_duelo_directa(request):
     """Arena de Duelo 1vs1 Directa"""
     perfil = get_perfil_activo(request)
     pregunta = Pregunta.objects.order_by("?").first()
+    iniciar_duelo(request, pregunta)
     return render(request, "sala_duelo.html", {"perfil": perfil, "pregunta": pregunta})
 
 
@@ -136,6 +213,7 @@ def sala_duelo(request, sala_id):
     perfil = get_perfil_activo(request)
     sala = get_object_or_404(SalaVirtual, id=sala_id)
     pregunta = Pregunta.objects.order_by("?").first()
+    iniciar_duelo(request, pregunta)
     return render(
         request,
         "sala_duelo.html",
