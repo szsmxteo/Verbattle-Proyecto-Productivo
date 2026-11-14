@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
+from datetime import date, timedelta  # <-- IMPORTANTE: Para la lógica de fechas
 from core.models import PerfilJugador, SalaVirtual, Pregunta
 
 # ==========================================
@@ -7,7 +8,7 @@ from core.models import PerfilJugador, SalaVirtual, Pregunta
 # ==========================================
 
 def get_perfil_activo():
-    """Obtiene o crea el perfil principal del jugador en la BD"""
+    """Obtiene o crea el perfil principal del jugador y calcula la racha diaria"""
     perfil, _ = PerfilJugador.objects.get_or_create(
         id=1,
         defaults={
@@ -15,9 +16,30 @@ def get_perfil_activo():
             'nivel_dominio': 'BAJO',
             'puntos_xp': 0,
             'victorias': 0,
-            'derrotas': 0
+            'derrotas': 0,
+            'racha_actual': 1  # <-- Inicia con 1 día de racha
         }
     )
+    
+    # 🧠 LÓGICA DEL SISTEMA DE RACHAS (STREAK)
+    hoy = date.today()
+    
+    if perfil.ultima_conexion:
+        if perfil.ultima_conexion == hoy - timedelta(days=1):
+            # Si se conectó ayer, aumenta la racha
+            perfil.racha_actual += 1
+        elif perfil.ultima_conexion < hoy - timedelta(days=1):
+            # Si se conectó hace más de un día, pierde la racha y vuelve a 1
+            perfil.racha_actual = 1
+        # Si `ultima_conexion == hoy`, no hacemos nada (ya jugó hoy)
+    else:
+        # Si es su primera conexión
+        perfil.racha_actual = 1
+        
+    # Actualizamos la fecha de última conexión al día de hoy
+    perfil.ultima_conexion = hoy
+    perfil.save()
+    
     return perfil
 
 def home(request):
@@ -116,7 +138,8 @@ def listar_usuarios(request):
             "id": perfil.id,
             "gamer_tag": perfil.gamer_tag,
             "puntos_xp": perfil.puntos_xp,
-            "nivel": perfil.nivel_dominio
+            "nivel": perfil.nivel_dominio,
+            "racha": perfil.racha_actual  # <-- Agregamos la racha a la API
         })
     return JsonResponse({"estado": "correcto", "usuarios": datos})
 
